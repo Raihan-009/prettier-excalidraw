@@ -15,7 +15,8 @@ Spec format: see references/spec-format.md (also summarised in SKILL.md).
 Standard library only.
 """
 import base64, hashlib, json, math, os, random, struct, sys, time
-from exstyle import (ARROW_COLORS, ARROWHEADS, CHAR_W, FILLS, FONT_IDS, LINE_H, STROKE, TINTS, area)
+from exstyle import (ARROW_COLORS, ARROWHEADS, CHAR_W, FILLS, FONT_IDS, LINE_H, STROKE, TINTS,
+                     adjust_svg_fills, area)
 
 _ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -165,7 +166,8 @@ class Builder:
             e["boundElements"].append({"type": "text", "id": t["id"]})
             self.layers["text"].append(t)
         if icon_h:
-            self._image(it["icon"], it["x"] + 12, it["y"] + (h - icon_h) / 2, None, icon_h, group=e)
+            self._image(it["icon"], it["x"] + 12, it["y"] + (h - icon_h) / 2, None, icon_h,
+                        group=e, against_fill=fill)
 
     def add_image(self, it):
         src = it.get("src") or self._resolve_icon(dict(it, label=it.get("label", "")))
@@ -232,7 +234,7 @@ class Builder:
         self.layers["text"].append(t)
         return t
 
-    def _image(self, src, x, y, w, h, group=None, spec_id=None):
+    def _image(self, src, x, y, w, h, group=None, spec_id=None, against_fill=None):
         path = os.path.join(self.base_dir, src) if not os.path.isabs(src) else src
         if not os.path.exists(path):
             raise SystemExit(f"icon not found: {path}")
@@ -241,6 +243,12 @@ class Builder:
         _check_image(path, data, ext)
         mime = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".svg": "image/svg+xml",
                 ".gif": "image/gif", ".webp": "image/webp"}.get(ext, "application/octet-stream")
+        # Roadmap 4.3 / issue #11: brand SVG fills that vanish on light box fills
+        # are rewritten to a darker shade of the same hue.
+        if ext == ".svg" and against_fill and against_fill not in (None, "transparent"):
+            data, changes = adjust_svg_fills(data, against_fill)
+            for ch in changes:
+                self.warnings.append(f"icon fill {ch} for contrast against {against_fill}")
         fid = hashlib.sha1(data).hexdigest()
         iw, ih = _image_dims(data, ext)
         ratio = iw / ih if iw and ih else 1.0

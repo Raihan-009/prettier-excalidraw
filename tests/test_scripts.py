@@ -293,5 +293,38 @@ class TestPreview(unittest.TestCase):
             self.assertIn("textLength", svg)
 
 
+class TestIconContrast(unittest.TestCase):
+    def test_backstage_teal_on_cyan_is_rewritten(self):
+        # Issue #11 / roadmap 4.3: brand teal vanishes on a cyan box fill.
+        icon = os.path.join(EXAMPLES, "icons", "backstage.svg")
+        raw = open(icon, encoding="utf-8").read()
+        self.assertRegex(raw, r'fill=["'']#1[Bb]9[Ee]8[Aa]["'']')
+        spec = {"elements": [{"id": "b", "type": "box", "label": "backstage",
+                              "icon": icon, "fill": "cyan", "x": 0, "y": 0, "w": 240, "h": 70}]}
+        b = build.Builder(spec, base_dir=EXAMPLES)
+        doc = b.build()
+        self.assertEqual(len(doc["files"]), 1)
+        data_url = next(iter(doc["files"].values()))["dataURL"]
+        svg = __import__("base64").b64decode(data_url.split(",", 1)[1]).decode("utf-8")
+        self.assertNotRegex(svg, r'fill=["'']#1[Bb]9[Ee]8[Aa]["'']')
+        import re
+        m = re.search(r'fill=["''](#[0-9A-Fa-f]+)["'']', svg)
+        self.assertIsNotNone(m)
+        new_fill = m.group(1)
+        self.assertGreaterEqual(exstyle.contrast_ratio(new_fill, exstyle.FILLS["cyan"]), 3.0)
+        self.assertTrue(any("icon fill" in w for w in b.warnings))
+
+    def test_high_contrast_icon_unchanged(self):
+        icon = os.path.join(EXAMPLES, "icons", "vault.svg")
+        spec = {"elements": [{"id": "v", "type": "box", "label": "vault",
+                              "icon": icon, "fill": "yellow", "x": 0, "y": 0, "w": 240, "h": 70}]}
+        b = build.Builder(spec, base_dir=EXAMPLES)
+        doc = b.build()
+        data_url = next(iter(doc["files"].values()))["dataURL"]
+        svg = __import__("base64").b64decode(data_url.split(",", 1)[1]).decode("utf-8")
+        self.assertRegex(svg, r'fill=["'']#000000["'']')
+        self.assertFalse(any("icon fill" in w for w in b.warnings))
+
+
 if __name__ == "__main__":
     unittest.main()
