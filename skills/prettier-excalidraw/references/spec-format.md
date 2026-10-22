@@ -104,6 +104,29 @@ the box layer. Prefer a `note` over free `text` when the caption sits over a tin
 region, so the background stays readable. `lint.py` treats the text as bound (no
 `text-over-box`) and ignores notes for `misleading-proximity`.
 
+### divider – a light boundary line
+```json
+{"type":"divider","x":0,"y":480,"length":1400,"orientation":"horizontal",
+ "dashed":true,"label":"private network"}
+```
+A 1 px Excalidraw `line`, not a connector (no arrowheads, no bindings), for layer
+boundaries and "before / after" splits. `orientation`: `horizontal` (default) or
+`vertical`; `length` is in canvas units from `x` / `y` to the right / down.
+`dashed: true` gives a dashed line. `label` is free text at the small size (16),
+placed just above the start of a horizontal divider or to the right of a vertical
+one; `size` overrides the font size.
+
+### group – move several elements together
+```json
+{"type":"group","members":["db","cache"]}
+```
+Appends one shared `groupIds` entry to each listed element (boxes, regions, images
+or dividers) plus its bound text and icon, so the members move together in
+Excalidraw without drawing anything. A `group` may appear anywhere in `elements`;
+the builder applies groups last, after every member exists. Unknown ids stop the
+build. Listing the same element in two groups nests the groups, which Excalidraw
+supports.
+
 ### arrow – a connector between two ids
 ```json
 {"type":"arrow","from":"queue","to":"worker1","label":"gRPC long-poll","color":"blue",
@@ -136,8 +159,9 @@ region, so the background stays readable. `lint.py` treats the text as bound (no
 
 ## Z-order produced
 regions and shapes (box / diamond / ellipse) sorted by area (largest first, so
-containers precede children, each followed by its bound label) → images → free text
-→ arrows. You never need to order the spec by hand.
+containers precede children, each followed by its bound label) → images → dividers
+→ free text → arrows. You never need to order the spec by hand. Groups are applied after every element is
+built, so they do not affect z-order.
 
 ## Worked example
 See `assets/examples/temporal.spec.json` and the `.excalidraw` it builds.

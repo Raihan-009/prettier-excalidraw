@@ -65,17 +65,23 @@ class Builder:
         h = spec.get("arrowhead", STYLE["arrowhead"])
         self.head = ARROWHEADS.get(h, h)      # a name like "outline", or a raw Excalidraw value
         self.files = {}
-        self.layers = {"region": [], "box": [], "image": [], "text": [], "arrow": []}
-        self.by_id = {}          # spec id -> excalidraw element (the box/region/image)
+        self.layers = {"region": [], "box": [], "image": [], "divider": [], "text": [], "arrow": []}
+        self.by_id = {}          # spec id -> excalidraw element (the box/region/image/divider)
+        self.attached_icons = {}  # element id -> icon images, for groups
         self.warnings = []
         self.darkened = []       # icons recoloured for contrast, summarised once at the end
         self.icon_dirs = icon_dirs(spec, base_dir)
 
     # ---------- public ----------
     def build(self):
+        # groups reference ids of elements defined anywhere in the spec, so they are
+        # applied after everything else exists.
         for item in self.spec["elements"]:
-            t = item["type"]
-            getattr(self, "add_" + t)(item)
+            if item["type"] != "group":
+                getattr(self, "add_" + item["type"])(item)
+        for item in self.spec["elements"]:
+            if item["type"] == "group":
+                self.add_group(item)
         return self.to_json()
 
     # ---------- element builders ----------
@@ -108,8 +114,9 @@ class Builder:
             pad = 16
             left = it.get("title_pos", "top-left") == "top-right"
             ix = it["x"] + pad if left else it["x"] + it["w"] - ih - pad
-            self._image(self._resolve_icon(dict(it, label=it.get("title", ""))), ix, it["y"] + pad - 4, None, ih,
-                        on_fill=fill if fill != "transparent" else "#ffffff", icon_color=it.get("icon_color"))
+            icon = self._image(self._resolve_icon(dict(it, label=it.get("title", ""))), ix, it["y"] + pad - 4, None, ih,
+                               on_fill=fill if fill != "transparent" else "#ffffff", icon_color=it.get("icon_color"))
+            self.attached_icons.setdefault(e["id"], []).append(icon)
         if it.get("subtitle"):
             # secondary note in the opposite top corner from the title, size 16
             size = it.get("subtitle_size", default_size("small"))
@@ -181,8 +188,9 @@ class Builder:
             e["boundElements"].append({"type": "text", "id": t["id"]})
             self.layers["text"].append(t)
         if icon_h:
-            self._image(it["icon"], it["x"] + 12, it["y"] + (h - icon_h) / 2, None, icon_h, group=e,
-                        on_fill=fill if fill != "transparent" else "#ffffff", icon_color=it.get("icon_color"))
+            icon = self._image(it["icon"], it["x"] + 12, it["y"] + (h - icon_h) / 2, None, icon_h, group=e,
+                               on_fill=fill if fill != "transparent" else "#ffffff", icon_color=it.get("icon_color"))
+            self.attached_icons.setdefault(e["id"], []).append(icon)
 
     def add_diamond(self, it):
         self._add_shape(it, "diamond", default_w=200, default_h=100, default_size_name="default")
@@ -253,6 +261,47 @@ class Builder:
                   lineHeight=LINE_H, backgroundColor=fill)
         e["boundElements"].append({"type": "text", "id": t["id"]})
         self.layers["text"].append(t)
+
+    def add_divider(self, it):
+        # a light boundary line, not a connector: 1 px, no arrowheads, optional small label
+        horizontal = it.get("orientation", "horizontal") != "vertical"
+        length = float(it["length"])
+        points = [[0, 0], [length, 0]] if horizontal else [[0, 0], [0, length]]
+        w, h = (length, 0) if horizontal else (0, length)
+        e = _base("line", it["x"], it["y"], w, h, id=it.get("id"), strokeWidth=1, points=points,
+                  lastCommittedPoint=None, startBinding=None, endBinding=None,
+                  startArrowhead=None, endArrowhead=None)
+        if it.get("dashed"):
+            e["strokeStyle"] = "dashed"
+        self._register(it, e, "divider")
+        if it.get("label"):
+            size = it.get("size", default_size("small"))
+            _, th = text_size(it["label"], self.font, size)
+            if horizontal:
+                self._free_text(it["label"], it["x"], it["y"] - th - 6, size, "left")
+            else:
+                self._free_text(it["label"], it["x"] + 8, it["y"], size, "left")
+
+    def add_group(self, it):
+        # one shared groupIds entry makes the members (and their bound text / icon) move together
+        gid = _id()
+        for ref in it.get("members", []):
+            e = self.by_id.get(ref)
+            if e is None:
+                raise SystemExit(f"group references unknown id: {ref}")
+            for member in self._group_members(e):
+                if gid not in member["groupIds"]:
+                    member["groupIds"].append(gid)
+
+    def _group_members(self, e):
+        members = [e]
+        members += [t for t in self.layers["text"] if t.get("containerId") == e["id"]]
+        members += self.attached_icons.get(e["id"], [])
+        seen, out = set(), []
+        for m in members:
+            if m["id"] not in seen:
+                seen.add(m["id"]); out.append(m)
+        return out
 
     def add_arrow(self, it):
         src, dst = self.by_id.get(it["from"]), self.by_id.get(it["to"])
@@ -411,8 +460,8 @@ class Builder:
 
     def to_json(self):
         # z-order: regions & shapes (box / diamond / ellipse) by area (big first, so
-        # parents precede children), then images, free/bound text, arrows last so
-        # nothing hides them.
+        # parents precede children), then images, dividers, free/bound text, arrows
+        # last so nothing hides them.
         shapes = sorted(self.layers["region"] + self.layers["box"],
                         key=lambda e: -e["width"] * e["height"])
         bound = {t["containerId"]: t for t in self.layers["text"] if t.get("containerId")}
@@ -422,6 +471,7 @@ class Builder:
             if s["id"] in bound:
                 ordered.append(bound.pop(s["id"]))
         ordered += self.layers["image"]
+        ordered += self.layers["divider"]
         ordered += [t for t in self.layers["text"] if not t.get("containerId")]
         ordered += self.layers["arrow"]
         for i, e in enumerate(ordered):

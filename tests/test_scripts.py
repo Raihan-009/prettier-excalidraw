@@ -451,6 +451,76 @@ class TestDiamondEllipse(unittest.TestCase):
             self.assertNotIn("box-overlap", rules)
             self.assertNotIn("misleading-proximity", rules)
 
+class TestDividersAndGroups(unittest.TestCase):
+    def test_divider_builds_as_line_and_lints_clean(self):
+        spec = {"elements": [
+            {"id": "d1", "type": "divider", "x": 0, "y": 480, "length": 600,
+             "orientation": "horizontal", "dashed": True, "label": "private network"},
+            {"id": "d2", "type": "divider", "x": 800, "y": 0, "length": 300,
+             "orientation": "vertical", "label": "after"}]}
+        doc = build.Builder(spec).build()
+        lines = [e for e in doc["elements"] if e["type"] == "line"]
+        self.assertEqual(len(lines), 2)
+        byid = {e["id"]: e for e in lines}
+        h, v = byid["d1"], byid["d2"]
+        self.assertEqual(h["strokeWidth"], 1)
+        self.assertEqual(h["strokeStyle"], "dashed")
+        self.assertEqual(h["points"], [[0, 0], [600, 0]])
+        self.assertEqual((h["width"], h["height"]), (600, 0))
+        self.assertEqual(v["points"], [[0, 0], [0, 300]])
+        self.assertEqual(v["strokeStyle"], "solid")
+        labels = {e["text"]: e for e in doc["elements"] if e["type"] == "text"}
+        self.assertEqual(labels["private network"]["fontSize"], exstyle.size("small"))
+        self.assertLess(labels["private network"]["y"], 480, "horizontal label sits above the line")
+        self.assertGreaterEqual(labels["after"]["x"], 808, "vertical label sits right of the line")
+        with tempfile.TemporaryDirectory() as td:
+            p = os.path.join(td, "o.excalidraw")
+            json.dump(doc, open(p, "w", encoding="utf-8"))
+            self.assertEqual(lint.lint(p), [], [f["message"] for f in lint.lint(p)])
+
+    def test_lint_skips_line_elements_for_arrow_rules(self):
+        doc = build.Builder({"elements": [
+            {"type": "divider", "x": 0, "y": 0, "length": 200}]}).build()
+        line = next(e for e in doc["elements"] if e["type"] == "line")
+        line["startArrowhead"] = None
+        line["endArrowhead"] = None
+        with tempfile.TemporaryDirectory() as td:
+            p = os.path.join(td, "o.excalidraw")
+            json.dump(doc, open(p, "w", encoding="utf-8"))
+            rules = {f["rule"] for f in lint.lint(p)}
+            self.assertNotIn("no-arrowhead", rules)
+            self.assertNotIn("arrowhead", rules)
+
+    def test_group_processed_last_and_covers_text_and_icon(self):
+        spec = {"elements": [
+            {"type": "group", "members": ["db", "cache"]},
+            {"id": "db", "type": "box", "x": 0, "y": 0, "label": "database",
+             "icon": os.path.join(EXAMPLES, "icons", "postgresql.svg")},
+            {"id": "cache", "type": "box", "x": 0, "y": 200, "label": "cache",
+             "icon": os.path.join(EXAMPLES, "icons", "redis.svg")},
+            {"id": "other", "type": "box", "x": 0, "y": 400, "label": "other"}]}
+        doc = build.Builder(spec).build()
+        els = doc["elements"]
+        byid = {e["id"]: e for e in els}
+        shared = set(byid["db"]["groupIds"]) & set(byid["cache"]["groupIds"])
+        self.assertEqual(len(shared), 1, "both members share exactly one group id")
+        gid = shared.pop()
+        self.assertNotIn(gid, byid["other"]["groupIds"], "unlisted elements stay out")
+        for key in ("db", "cache"):
+            box = byid[key]
+            self.assertIn(gid, box["groupIds"])
+            text = next(t for t in els if t["type"] == "text" and t["containerId"] == box["id"])
+            self.assertIn(gid, text["groupIds"])
+            icons = [e for e in els if e["type"] == "image"
+                     and box["x"] <= e["x"] <= box["x"] + box["width"]
+                     and box["y"] <= e["y"] <= box["y"] + box["height"]]
+            self.assertEqual(len(icons), 1, "the box icon joins the group too")
+            self.assertIn(gid, icons[0]["groupIds"])
+
+    def test_group_unknown_member_is_an_error(self):
+        with self.assertRaises(SystemExit):
+            build.Builder({"elements": [{"type": "group", "members": ["nope"]}]}).build()
+
 
 class TestStyleProfiles(unittest.TestCase):
     def tearDown(self):
