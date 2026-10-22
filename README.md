@@ -79,6 +79,7 @@ All in `skills/prettier-excalidraw/scripts/`, run from that directory.
 | `lint.py file.excalidraw` | 15 style checks with element ids. `--font nunito`, `--arrowhead filled`, `--json` |
 | `fix.py in out` | Mechanical fixes: font, sizes, roughness, fills, corners, heads, z-order. Never moves anything |
 | `preview.py file out.svg [--square]` | SVG render with exact text widths, for checking layout without Excalidraw |
+| `preview.py file out.png --png` | PNG preview using Chrome, or macOS Quick Look with automatic square padding |
 
 The spec format is documented in
 [spec-format.md](skills/prettier-excalidraw/references/spec-format.md). A full

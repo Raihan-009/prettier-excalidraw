@@ -90,7 +90,14 @@ order the spec by hand.
 See `assets/examples/temporal.spec.json` and the `.excalidraw` it builds.
 
 ## Rendering a preview to PNG
-`preview.py` writes SVG. To look at it, best first:
+Run `python3 preview.py d.excalidraw d.png --png`. It uses Chrome/Chromium on
+`PATH` (or Google Chrome in `/Applications` on macOS) at 2x. If Chrome is not
+installed, macOS falls back to Quick Look at up to 2400px, automatically padding
+the canvas to a square so wide diagrams are not cropped. `--square` also works
+with Chrome when a square preview is wanted. Other systems need Chrome/Chromium.
+
+Without `--png`, `preview.py` still writes SVG at the diagram's aspect ratio.
+To rasterise that SVG by hand:
 - Chrome, any OS, exact size and crisp at 2x. Read `width`/`height` from the SVG's
   first line, then:
   ```

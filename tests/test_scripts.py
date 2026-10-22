@@ -3,6 +3,10 @@
 Run:  python3 -m unittest discover -s tests -v
 """
 import copy, glob, json, os, subprocess, sys, tempfile, unittest
+from pathlib import Path
+from unittest import mock
+from urllib.parse import unquote, urlparse
+import xml.etree.ElementTree as ET
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILL = os.path.join(ROOT, "skills", "prettier-excalidraw")
@@ -10,7 +14,7 @@ SCRIPTS = os.path.join(SKILL, "scripts")
 EXAMPLES = os.path.join(SKILL, "assets", "examples")
 sys.path.insert(0, SCRIPTS)
 
-import build, exstyle, fix, lint  # noqa: E402
+import build, exstyle, fix, lint, preview  # noqa: E402
 
 
 def run(script, *args):
@@ -211,6 +215,79 @@ class TestPreview(unittest.TestCase):
             svg = open(out).read()
             self.assertTrue(svg.startswith("<svg"))
             self.assertIn("textLength", svg)
+
+    def test_png_prefers_chrome_and_keeps_wide_canvas(self):
+        with tempfile.TemporaryDirectory(prefix="preview test ") as td:
+            src = Path(td) / "wide.excalidraw"
+            src.write_text(json.dumps({"elements": [{"type": "rectangle", "x": 0, "y": 0,
+                                                    "width": 1000, "height": 100}]}))
+            out = Path(td) / "out.png"
+
+            def chrome_run(command, **kwargs):
+                svg = ET.fromstring(Path(unquote(urlparse(command[-1]).path)).read_text())
+                self.assertEqual((float(svg.get("width")), float(svg.get("height"))), (1080, 180))
+                self.assertIn("--window-size=1080,180", command)
+                self.assertIn("--force-device-scale-factor=2", command)
+                screenshot = next(arg.split("=", 1)[1] for arg in command if arg.startswith("--screenshot="))
+                Path(screenshot).write_bytes(b"png from chrome")
+
+            with mock.patch.object(preview, "find_chrome", return_value="/chrome path/chrome"), \
+                    mock.patch.object(preview.subprocess, "run", side_effect=chrome_run) as run_mock:
+                preview.render_png(src, out)
+            self.assertEqual(out.read_bytes(), b"png from chrome")
+            self.assertEqual(run_mock.call_args.args[0][0], "/chrome path/chrome")
+
+    def test_quicklook_pads_wide_and_tall_canvases(self):
+        for width, height in ((1000, 100), (100, 1000)):
+            with self.subTest(width=width, height=height), tempfile.TemporaryDirectory() as td:
+                src = Path(td) / "diagram.excalidraw"
+                src.write_text(json.dumps({"elements": [{"type": "rectangle", "x": 0, "y": 0,
+                                                        "width": width, "height": height}]}))
+                out = Path(td) / "out.png"
+
+                def quicklook_run(command, **kwargs):
+                    self.assertEqual(command[:4], ["/usr/bin/qlmanage", "-t", "-s", "2400"])
+                    svg = ET.fromstring(Path(command[-1]).read_text())
+                    self.assertEqual((float(svg.get("width")), float(svg.get("height"))), (1080, 1080))
+                    x, y, w, h = map(float, svg.get("viewBox").split())
+                    self.assertEqual((x + w / 2, y + h / 2), (width / 2, height / 2))
+                    Path(command[-1] + ".png").write_bytes(b"png from quicklook")
+
+                with mock.patch.object(preview, "find_chrome", return_value=None), \
+                        mock.patch.object(preview.sys, "platform", "darwin"), \
+                        mock.patch.object(preview.shutil, "which", return_value="/usr/bin/qlmanage"), \
+                        mock.patch.object(preview.subprocess, "run", side_effect=quicklook_run):
+                    preview.render_png(src, out)
+                self.assertEqual(out.read_bytes(), b"png from quicklook")
+
+    def test_png_without_renderer_reports_requirement(self):
+        with mock.patch.object(preview, "find_chrome", return_value=None), \
+                mock.patch.object(preview.sys, "platform", "linux"):
+            with self.assertRaisesRegex(RuntimeError, "Chrome/Chromium"):
+                preview.render_png("unused.excalidraw", "unused.png")
+
+    def test_failed_renderer_keeps_existing_output(self):
+        for result in (None, subprocess.CalledProcessError(1, "chrome"),
+                       subprocess.TimeoutExpired("chrome", 60)):
+            with self.subTest(result=result), tempfile.TemporaryDirectory() as td:
+                out = Path(td) / "out.png"
+                out.write_bytes(b"previous preview")
+                with mock.patch.object(preview, "find_chrome", return_value="chrome"), \
+                        mock.patch.object(preview.subprocess, "run", side_effect=result):
+                    with self.assertRaises((RuntimeError, subprocess.SubprocessError)):
+                        preview.render_png(os.path.join(EXAMPLES, "payment.excalidraw"), out)
+                self.assertEqual(out.read_bytes(), b"previous preview")
+
+    def test_plain_svg_keeps_original_aspect_ratio(self):
+        with tempfile.TemporaryDirectory() as td:
+            src = Path(td) / "wide.excalidraw"
+            src.write_text(json.dumps({"elements": [{"type": "rectangle", "x": 0, "y": 0,
+                                                    "width": 1000, "height": 100}]}))
+            out = Path(td) / "out.svg"
+            r = run("preview.py", str(src), str(out))
+            self.assertEqual(r.returncode, 0, r.stderr)
+            svg = ET.fromstring(out.read_text())
+            self.assertEqual((float(svg.get("width")), float(svg.get("height"))), (1080, 180))
 
 
 if __name__ == "__main__":
