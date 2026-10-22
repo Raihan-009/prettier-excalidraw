@@ -1,0 +1,95 @@
+{
+  "font": "comic",
+  "arrowhead": "outline",
+  "elements": [
+    {
+      "id": "start",
+      "type": "ellipse",
+      "label": "start",
+      "x": 40,
+      "y": 140,
+      "w": 100,
+      "h": 40,
+      "fill": "green"
+    },
+    {
+      "id": "check",
+      "type": "diamond",
+      "label": "is solution\navailable?",
+      "x": 240,
+      "y": 100,
+      "w": 220,
+      "h": 120,
+      "fill": "none"
+    },
+    {
+      "id": "yes",
+      "type": "ellipse",
+      "label": "yes",
+      "x": 560,
+      "y": 60,
+      "w": 80,
+      "h": 40,
+      "fill": "green"
+    },
+    {
+      "id": "no",
+      "type": "ellipse",
+      "label": "no",
+      "x": 560,
+      "y": 220,
+      "w": 80,
+      "h": 40,
+      "fill": "orange"
+    },
+    {
+      "id": "ship",
+      "type": "box",
+      "label": "ship it",
+      "x": 740,
+      "y": 45,
+      "w": 200,
+      "h": 70,
+      "fill": "blue"
+    },
+    {
+      "id": "retry",
+      "type": "box",
+      "label": "keep looking",
+      "x": 740,
+      "y": 205,
+      "w": 200,
+      "h": 70,
+      "fill": "yellow"
+    },
+    {
+      "type": "arrow",
+      "from": "start",
+      "to": "check"
+    },
+    {
+      "type": "arrow",
+      "from": "check",
+      "to": "yes",
+      "from_side": "top",
+      "to_side": "left"
+    },
+    {
+      "type": "arrow",
+      "from": "check",
+      "to": "no",
+      "from_side": "bottom",
+      "to_side": "left"
+    },
+    {
+      "type": "arrow",
+      "from": "yes",
+      "to": "ship"
+    },
+    {
+      "type": "arrow",
+      "from": "no",
+      "to": "retry"
+    }
+  ]
+}

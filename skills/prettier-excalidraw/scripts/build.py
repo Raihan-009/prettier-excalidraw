@@ -184,6 +184,40 @@ class Builder:
             self._image(it["icon"], it["x"] + 12, it["y"] + (h - icon_h) / 2, None, icon_h, group=e,
                         on_fill=fill if fill != "transparent" else "#ffffff", icon_color=it.get("icon_color"))
 
+    def add_diamond(self, it):
+        self._add_shape(it, "diamond", default_w=200, default_h=100, default_size_name="default")
+
+    def add_ellipse(self, it):
+        # small markers (80×40) need size 16 so a one-line label fits without growing
+        self._add_shape(it, "ellipse", default_w=80, default_h=40, default_size_name="small")
+
+    def _add_shape(self, it, etype, default_w, default_h, default_size_name="default"):
+        """Diamond / ellipse: bound centred label, same layer and bindings as a box."""
+        fill = FILLS.get(it.get("fill", "none"), it.get("fill", "transparent"))
+        size = it.get("size", default_size(default_size_name))
+        w, h = it.get("w", default_w), it.get("h", default_h)
+        tw, th = text_size(it.get("label", ""), self.font, size)
+        if it.get("label") and th + 16 > h:
+            new_h = int(math.ceil((th + 16) / 20.0) * 20)
+            self.warnings.append(f"{etype} {it.get('id')}: heightened {h} -> {new_h} to fit label")
+            h = new_h
+        if it.get("label") and tw + 16 > w:
+            new_w = int(math.ceil((tw + 16) / 20.0) * 20)
+            self.warnings.append(f"{etype} {it.get('id')}: widened {w} -> {new_w} to fit label")
+            w = new_w
+        e = _base(etype, it["x"], it["y"], w, h, id=it.get("id"), backgroundColor=fill,
+                  strokeWidth=it.get("stroke_width", STYLE["stroke_width"]), roundness=STYLE["roundness"])
+        if it.get("dashed"):
+            e["strokeStyle"] = "dashed"
+        self._register(it, e, "box")
+        if it.get("label"):
+            t = _base("text", it["x"] + (w - tw) / 2, it["y"] + (h - th) / 2, tw, th,
+                      text=it["label"], originalText=it["label"], fontSize=size, fontFamily=self.font,
+                      textAlign="center", verticalAlign="middle", containerId=e["id"], autoResize=True,
+                      lineHeight=LINE_H, backgroundColor=fill)
+            e["boundElements"].append({"type": "text", "id": t["id"]})
+            self.layers["text"].append(t)
+
     def add_image(self, it):
         src = it.get("src") or self._resolve_icon(dict(it, label=it.get("label", "")))
         if not src:
@@ -357,8 +391,9 @@ class Builder:
         return best, vertical
 
     def to_json(self):
-        # z-order: regions & boxes by area (big first, so parents precede children), then
-        # images, free/bound text, arrows last so nothing hides them.
+        # z-order: regions & shapes (box / diamond / ellipse) by area (big first, so
+        # parents precede children), then images, free/bound text, arrows last so
+        # nothing hides them.
         shapes = sorted(self.layers["region"] + self.layers["box"],
                         key=lambda e: -e["width"] * e["height"])
         bound = {t["containerId"]: t for t in self.layers["text"] if t.get("containerId")}

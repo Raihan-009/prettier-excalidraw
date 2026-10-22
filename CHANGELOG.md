@@ -12,6 +12,10 @@ See [ROADMAP.md](ROADMAP.md).
 ## [0.3.0] - 2026-10-22
 
 ### Added
+- `build.py`: `diamond` decision nodes and `ellipse` start/end/actor markers with
+  bound centred labels, palette fills, and the same arrow bindings / z-order as
+  boxes; example flowchart in `assets/examples/` (#36).
+
 - `export.py`: SVG or PNG export of any diagram with the real fonts embedded,
   rasterised by Chrome or macOS quick-look; `build.py --png` / `--svg` write the
   image next to the `.excalidraw` file (roadmap 1.1, #15).

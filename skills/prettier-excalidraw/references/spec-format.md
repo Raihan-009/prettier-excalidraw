@@ -56,6 +56,25 @@ Icon folders are searched in this order: `icons_dir` (a string or a list), then 
   enlarges a box that cannot fit its label (more than 4 px short) and prints a warning - treat warnings as a cue to adjust the layout.
 - `dashed: true`, `stroke_width`.
 
+### diamond – a decision node with a bound centred label
+```json
+{"id":"ok","type":"diamond","label":"is solution\navailable?","x":400,"y":100,
+ "w":220,"h":120,"fill":"none"}
+```
+- Same `fill`, `size`, `dashed`, `stroke_width` as a box.
+- `w` / `h` default 200 × 100. The builder enlarges the shape when the label does not fit.
+- Arrows bind to the bounding-box sides; z-order matches boxes.
+
+### ellipse – a start / end / actor marker with a bound centred label
+```json
+{"id":"start","type":"ellipse","label":"yes","x":700,"y":120,"w":80,"h":40,"fill":"green"}
+```
+- Same `fill`, `dashed`, `stroke_width` as a box. Default `size` is 16 so a one-line
+  label fits the 80 × 40 default; pass `size: 20` for larger markers.
+- `w` / `h` default 80 × 40. The builder enlarges the shape when the label does not fit.
+- Arrows bind like boxes; z-order matches boxes. Flowchart markers are ignored by
+  `box-overlap` and `misleading-proximity` (those rules look at component rectangles).
+
 ### image – a standalone logo or picture
 ```json
 {"id":"k8s","type":"image","src":"icons/kubernetes.svg","x":1080,"y":60,"h":100,
@@ -79,7 +98,7 @@ below. Can be an arrow target when it has an `id`.
  "from_side":"bottom","to_side":"top","from_offset":40,"label_at":"start",
  "bidirectional":false,"dashed":false}
 ```
-- `from` / `to`: ids of boxes, regions or images.
+- `from` / `to`: ids of boxes, diamonds, ellipses, regions or images.
 - `from_side` / `to_side`: `left | right | top | bottom`; omitted sides are chosen
   from the relative position of the two elements.
 - `from_offset` / `to_offset`: shift the anchor along the side (px) so several
@@ -104,9 +123,9 @@ below. Can be an arrow target when it has an `id`.
   arrow's colour.
 
 ## Z-order produced
-regions and boxes sorted by area (largest first, so containers precede children,
-each followed by its bound label) → images → free text → arrows. You never need to
-order the spec by hand.
+regions and shapes (box / diamond / ellipse) sorted by area (largest first, so
+containers precede children, each followed by its bound label) → images → free text
+→ arrows. You never need to order the spec by hand.
 
 ## Worked example
 See `assets/examples/temporal.spec.json` and the `.excalidraw` it builds.

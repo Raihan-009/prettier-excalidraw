@@ -317,6 +317,74 @@ class TestSplitBranchArrows(unittest.TestCase):
             self.assertEqual([h["id"] for h in hits], [last["id"]])
 
 
+class TestDiamondEllipse(unittest.TestCase):
+    def test_diamond_and_ellipse_build_bind_and_defaults(self):
+        spec = {"elements": [
+            {"id": "start", "type": "ellipse", "label": "start", "x": 0, "y": 120, "fill": "green"},
+            {"id": "ok", "type": "diamond", "label": "is solution\navailable?", "x": 200, "y": 100,
+             "w": 220, "h": 120, "fill": "none"},
+            {"id": "yes", "type": "ellipse", "label": "yes", "x": 500, "y": 140, "w": 80, "h": 40, "fill": "green"},
+            {"id": "done", "type": "box", "label": "ship it", "x": 680, "y": 125, "fill": "blue"},
+            {"type": "arrow", "from": "start", "to": "ok"},
+            {"type": "arrow", "from": "ok", "to": "yes"},
+            {"type": "arrow", "from": "yes", "to": "done"},
+        ]}
+        doc = build.Builder(spec).build()
+        byid = {e["id"]: e for e in doc["elements"] if "id" in e}
+        self.assertEqual(byid["ok"]["type"], "diamond")
+        self.assertEqual(byid["yes"]["type"], "ellipse")
+        self.assertEqual(byid["start"]["type"], "ellipse")
+        self.assertEqual(byid["start"]["width"], 80)
+        self.assertEqual(byid["start"]["height"], 40)
+        self.assertEqual(byid["ok"]["backgroundColor"], "transparent")
+        self.assertEqual(byid["yes"]["backgroundColor"], "#b2f2bb")
+        self.assertEqual(byid["ok"]["roughness"], 0)
+        self.assertIsNone(byid["ok"].get("roundness"))
+        # bound centred labels (ellipse defaults to size 16 so 80×40 fits)
+        labels = {t["containerId"]: t for t in doc["elements"]
+                  if t["type"] == "text" and t.get("containerId")}
+        self.assertIn("ok", labels)
+        self.assertIn("yes", labels)
+        self.assertEqual(labels["start"]["fontSize"], 16)
+        self.assertEqual(labels["ok"]["fontSize"], 20)
+        self.assertEqual(labels["ok"]["textAlign"], "center")
+        self.assertAlmostEqual(labels["ok"]["x"],
+                               byid["ok"]["x"] + (byid["ok"]["width"] - labels["ok"]["width"]) / 2, places=3)
+        # arrows bind to diamond / ellipse like boxes
+        for a in (e for e in doc["elements"] if e["type"] == "arrow"):
+            self.assertIn(a["startBinding"]["elementId"], byid)
+            self.assertIn(a["endBinding"]["elementId"], byid)
+        # z-order: same layer as boxes — arrows after every shape including diamond/ellipse
+        types = [e["type"] for e in doc["elements"]]
+        last_shape = max(i for i, t in enumerate(types) if t in ("rectangle", "diamond", "ellipse"))
+        first_arrow = min(i for i, t in enumerate(types) if t == "arrow")
+        self.assertGreater(first_arrow, last_shape)
+        with tempfile.TemporaryDirectory() as td:
+            p = os.path.join(td, "o.excalidraw")
+            json.dump(doc, open(p, "w", encoding="utf-8"))
+            self.assertEqual(lint.lint(p), [])
+
+    def test_default_diamond_size(self):
+        doc = build.Builder({"elements": [
+            {"id": "d", "type": "diamond", "label": "ok?", "x": 0, "y": 0}]}).build()
+        d = next(e for e in doc["elements"] if e["id"] == "d")
+        self.assertEqual((d["width"], d["height"]), (200, 100))
+        self.assertEqual(d["type"], "diamond")
+
+    def test_overlap_rules_ignore_diamond_ellipse(self):
+        spec = {"elements": [
+            {"id": "d", "type": "diamond", "label": "ok?", "x": 0, "y": 0, "w": 200, "h": 100},
+            {"id": "e", "type": "ellipse", "label": "yes", "x": 100, "y": 30, "w": 80, "h": 40, "fill": "green"},
+            {"id": "b", "type": "box", "label": "svc", "x": 50, "y": 20, "w": 200, "h": 60, "fill": "blue"},
+        ]}
+        with tempfile.TemporaryDirectory() as td:
+            p = os.path.join(td, "o.excalidraw")
+            json.dump(build.Builder(spec).build(), open(p, "w", encoding="utf-8"))
+            rules = {f["rule"] for f in lint.lint(p)}
+            self.assertNotIn("box-overlap", rules)
+            self.assertNotIn("misleading-proximity", rules)
+
+
 class TestStyleProfiles(unittest.TestCase):
     def tearDown(self):
         # restore the house style for the other tests

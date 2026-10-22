@@ -46,6 +46,8 @@ def lint(path, font=None, arrowhead=None):
     def add(rule, e, msg, fixable=True):
         out.append({"rule": rule, "id": e["id"], "type": e["type"], "message": msg, "fixable": fixable})
 
+    # Component boxes only: diamonds / ellipses are flowchart markers, so proximity and
+    # box-overlap (built from filled_rects) deliberately ignore them.
     filled_rects = [e for e in els if e["type"] == "rectangle"
                     and e.get("backgroundColor") not in (None, "transparent")]
     # elements that some bound arrow starts from: a headless arrow ending on one of these

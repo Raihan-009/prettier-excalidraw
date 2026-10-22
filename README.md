@@ -110,6 +110,7 @@ example:
 | [ecommerce](skills/prettier-excalidraw/assets/examples/ecommerce.spec.json) | cluster region, dotted group, semantic arrow colours, four logos |
 | [platform](skills/prettier-excalidraw/assets/examples/platform.spec.json) | three stacked layers, nine logos, colour key |
 | [payment](skills/prettier-excalidraw/assets/examples/payment.spec.json) | stores under their owner, webhook return arrow |
+| [flowchart](skills/prettier-excalidraw/assets/examples/flowchart.spec.json) | diamond decision node and ellipse start/yes/no markers |
 | [layered-architecture](skills/prettier-excalidraw/assets/examples/layered-architecture.excalidraw) | a hand-drawn reference diagram the style was measured from |
 
 ## Evaluation
