@@ -22,6 +22,8 @@ make it mechanical so you can spend your effort on layout and meaning instead of
 
 All scripts are Python 3 standard library only and live in `scripts/`. Run them from
 that directory (they import each other) or set `PYTHONPATH` to it.
+If a script fails, run `python3 doctor.py` first: it says what is missing (Python
+3.10+, Chrome for PNG, fonts, the icons/style variables) with a hint for each.
 
 ## Generate a new diagram
 

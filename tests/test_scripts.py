@@ -925,5 +925,66 @@ class TestExploreMode(unittest.TestCase):
             self.assertIn("textLength", svg)
 
 
+class TestDoctor(unittest.TestCase):
+    """doctor.py: report what is missing, exit 1 only for what build/lint/SVG need (#29)."""
+
+    def doctor(self, **env):
+        with tempfile.TemporaryDirectory() as home:
+            e = {k: v for k, v in os.environ.items()
+                 if k not in ("PRETTIER_EXCALIDRAW_ICONS", "PRETTIER_EXCALIDRAW_STYLE")}
+            e.update(HOME=home, USERPROFILE=home)  # an empty font cache
+            e.update(env)
+            return subprocess.run([sys.executable, os.path.join(SCRIPTS, "doctor.py")],
+                                  capture_output=True, text=True, cwd=SCRIPTS, env=e)
+
+    def test_clean_environment_is_ready(self):
+        r = self.doctor()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        out = r.stdout
+        self.assertIn("ok    Python 3.", out)
+        self.assertIn("Chrome/Chromium/Edge:", out)
+        # empty cache: a warning with a hint, not a failure
+        self.assertIn("warn  font cache: no Comic Shanns / Nunito", out)
+        self.assertIn("PRETTIER_EXCALIDRAW_ICONS: not set", out)
+        self.assertIn("PRETTIER_EXCALIDRAW_STYLE: not set", out)
+        self.assertTrue(out.rstrip().endswith("ready"), out)
+
+    def test_bad_style_and_icons_fail_with_hints(self):
+        with tempfile.TemporaryDirectory() as td:
+            missing = os.path.join(td, "nope")
+            r = self.doctor(PRETTIER_EXCALIDRAW_STYLE=os.path.join(td, "style.json"),
+                            PRETTIER_EXCALIDRAW_ICONS=os.pathsep.join([td, missing]))
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertIn("FAIL  PRETTIER_EXCALIDRAW_STYLE: no such file", r.stdout)
+        self.assertIn("FAIL  PRETTIER_EXCALIDRAW_ICONS: not a folder: " + missing, r.stdout)
+        self.assertEqual(r.stdout.count("      -> "), r.stdout.count("FAIL") + r.stdout.count("warn"))
+
+    def test_style_that_is_not_json_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            style = os.path.join(td, "style.json")
+            with open(style, "w", encoding="utf-8") as f:
+                f.write("not json")
+            r = self.doctor(PRETTIER_EXCALIDRAW_STYLE=style)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertIn("cannot read", r.stdout)
+
+    def test_good_style_icons_and_fonts_are_ok(self):
+        import export
+        with tempfile.TemporaryDirectory() as td:
+            style = os.path.join(td, "style.json")
+            with open(style, "w", encoding="utf-8") as f:
+                json.dump({"name": "mine"}, f)
+            cache = os.path.join(td, ".cache", "prettier-excalidraw", "fonts")
+            for folder in export.FONT_DIRS.values():
+                os.makedirs(os.path.join(cache, folder))
+                open(os.path.join(cache, folder, "x.woff2"), "wb").close()
+            r = self.doctor(PRETTIER_EXCALIDRAW_STYLE=style, PRETTIER_EXCALIDRAW_ICONS=EXAMPLES,
+                            HOME=td, USERPROFILE=td)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("ok    font cache:", r.stdout)
+        self.assertIn("ok    PRETTIER_EXCALIDRAW_STYLE: " + style, r.stdout)
+        self.assertIn("ok    PRETTIER_EXCALIDRAW_ICONS: " + EXAMPLES, r.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

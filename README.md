@@ -164,6 +164,7 @@ All in `skills/prettier-excalidraw/scripts/`, run from that directory.
 | `profile.py folder -o style.json` | Measure your own diagrams and write a style profile; pass `--style style.json` to the other scripts to use it instead of the house style |
 | `export.py file out.png\|out.svg\|out.html [--scale 2] [--spec spec.json]` | Shareable image with the real fonts embedded; Chrome or macOS quick-look for PNG. `.html` is a self-contained animated page (flow, hover, play, explore). `build.py ... --png` / `--html` does it in one step |
 | `icons.py search fly` / `icons.py fetch postgresql apachekafka -o icons/` | Find and download brand logos from Simple Icons with the brand colour applied |
+| `doctor.py` | Check the environment (Python 3.10+, Chrome for PNG, font cache, `PRETTIER_EXCALIDRAW_ICONS` / `PRETTIER_EXCALIDRAW_STYLE`, quick-look on macOS) and print a hint for anything missing; exit 1 when build, lint or SVG export would fail |
 
 The spec format is documented in
 [spec-format.md](skills/prettier-excalidraw/references/spec-format.md). A full
