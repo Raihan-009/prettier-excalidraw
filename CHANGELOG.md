@@ -6,14 +6,17 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Planned
+See [ROADMAP.md](ROADMAP.md).
+
+## [0.8.1] - 2026-11-02
+
 ### Added
 - `doctor.py` checks the environment and says what is missing (#29): Python 3.10+,
   Chrome/Chromium/Edge for PNG export, the font cache, `PRETTIER_EXCALIDRAW_ICONS` and
   `PRETTIER_EXCALIDRAW_STYLE` when set, and quick-look on macOS, with a one-line hint
   for each problem. Exit 1 only when build, lint or SVG export would fail.
-
-### Planned
-See [ROADMAP.md](ROADMAP.md).
+  Contributed by @O1sumitkumar.
 
 ## [0.8.0] - 2026-10-25
 

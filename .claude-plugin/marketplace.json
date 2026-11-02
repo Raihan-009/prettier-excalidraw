@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Clean, consistent Excalidraw architecture diagrams from Claude Code.",
-    "version": "0.8.0"
+    "version": "0.8.1"
   },
   "plugins": [
     {
       "name": "prettier-excalidraw",
       "source": "./",
       "description": "Create, restyle and lint Excalidraw architecture diagrams in a clean house style.",
-      "version": "0.8.0",
+      "version": "0.8.1",
       "category": "productivity",
       "keywords": ["excalidraw", "diagram", "architecture"]
     }

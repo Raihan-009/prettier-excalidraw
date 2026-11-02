@@ -1,6 +1,6 @@
 {
   "name": "prettier-excalidraw",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Create, restyle and lint Excalidraw architecture diagrams in a clean, opinionated house style: architect roughness, one font, hollow-triangle elbow arrows, light colour-coded boxes, tinted regions, correct z-order and proportionally sized logos.",
   "author": {
     "name": "Raihan Islam",
