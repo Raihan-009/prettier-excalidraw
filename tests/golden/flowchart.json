@@ -1,0 +1,248 @@
+[
+  {
+    "backgroundColor": "transparent",
+    "height": 120.0,
+    "id": "check",
+    "strokeColor": "#1e1e1e",
+    "type": "diamond",
+    "width": 220.0,
+    "x": 240.0,
+    "y": 100.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": "check",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 50.0,
+    "strokeColor": "#1e1e1e",
+    "text": "is solution\navailable?",
+    "type": "text",
+    "width": 121.00000000000001,
+    "x": 289.5,
+    "y": 135.0
+  },
+  {
+    "backgroundColor": "#a5d8ff",
+    "height": 70.0,
+    "id": "ship",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 200.0,
+    "x": 740.0,
+    "y": 45.0
+  },
+  {
+    "backgroundColor": "#a5d8ff",
+    "containerId": "ship",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "ship it",
+    "type": "text",
+    "width": 77.00000000000001,
+    "x": 801.5,
+    "y": 67.5
+  },
+  {
+    "backgroundColor": "#ffec99",
+    "height": 70.0,
+    "id": "retry",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 200.0,
+    "x": 740.0,
+    "y": 205.0
+  },
+  {
+    "backgroundColor": "#ffec99",
+    "containerId": "retry",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "keep looking",
+    "type": "text",
+    "width": 132.0,
+    "x": 774.0,
+    "y": 227.5
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 40.0,
+    "id": "start",
+    "strokeColor": "#1e1e1e",
+    "type": "ellipse",
+    "width": 100.0,
+    "x": 40.0,
+    "y": 140.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "start",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "start",
+    "type": "text",
+    "width": 44.0,
+    "x": 68.0,
+    "y": 150.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 40.0,
+    "id": "yes",
+    "strokeColor": "#1e1e1e",
+    "type": "ellipse",
+    "width": 80.0,
+    "x": 560.0,
+    "y": 60.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "yes",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "yes",
+    "type": "text",
+    "width": 26.400000000000002,
+    "x": 586.8,
+    "y": 70.0
+  },
+  {
+    "backgroundColor": "#ffd8a8",
+    "height": 40.0,
+    "id": "no",
+    "strokeColor": "#1e1e1e",
+    "type": "ellipse",
+    "width": 80.0,
+    "x": 560.0,
+    "y": 220.0
+  },
+  {
+    "backgroundColor": "#ffd8a8",
+    "containerId": "no",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "no",
+    "type": "text",
+    "width": 17.6,
+    "x": 591.2,
+    "y": 230.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        90.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 90.0,
+    "x": 145.0,
+    "y": 160.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 15.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -15.0
+      ],
+      [
+        205.0,
+        -15.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 205.0,
+    "x": 350.0,
+    "y": 95.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 15.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        15.0
+      ],
+      [
+        205.0,
+        15.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 205.0,
+    "x": 350.0,
+    "y": 225.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        90.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 90.0,
+    "x": 645.0,
+    "y": 80.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        90.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 90.0,
+    "x": 645.0,
+    "y": 240.0
+  }
+]
