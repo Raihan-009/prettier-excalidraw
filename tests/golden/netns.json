@@ -1,0 +1,423 @@
+[
+  {
+    "backgroundColor": "transparent",
+    "height": 780.0,
+    "id": "server",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 1100.0,
+    "x": 0.0,
+    "y": 0.0
+  },
+  {
+    "backgroundColor": "#e7f5ff",
+    "height": 420.0,
+    "id": "root",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 980.0,
+    "x": 60.0,
+    "y": 320.0
+  },
+  {
+    "backgroundColor": "#fff9db",
+    "height": 200.0,
+    "id": "ns0",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 420.0,
+    "x": 60.0,
+    "y": 60.0
+  },
+  {
+    "backgroundColor": "#fff9db",
+    "height": 200.0,
+    "id": "ns1",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 420.0,
+    "x": 620.0,
+    "y": 60.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "ceth0",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 220.0,
+    "x": 240.0,
+    "y": 140.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "ceth0",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "ceth0\n[172.18.0.10/16]",
+    "type": "text",
+    "width": 140.8,
+    "x": 279.6,
+    "y": 155.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "ceth1",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 220.0,
+    "x": 800.0,
+    "y": 140.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "ceth1",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "ceth1\n[172.18.0.20/16]",
+    "type": "text",
+    "width": 140.8,
+    "x": 839.6,
+    "y": 155.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "veth0",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 220.0,
+    "x": 240.0,
+    "y": 380.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "veth0",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "veth0\n[no ip address]",
+    "type": "text",
+    "width": 132.0,
+    "x": 284.0,
+    "y": 395.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "veth1",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 220.0,
+    "x": 800.0,
+    "y": 380.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "veth1",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "veth1\n[no ip address]",
+    "type": "text",
+    "width": 132.0,
+    "x": 844.0,
+    "y": 395.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "br0",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 220.0,
+    "x": 440.0,
+    "y": 540.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "br0",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "br0\n[172.18.0.1/16]",
+    "type": "text",
+    "width": 132.0,
+    "x": 484.0,
+    "y": 555.0
+  },
+  {
+    "backgroundColor": "#e9ecef",
+    "height": 64.0,
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 240.0,
+    "x": 760.0,
+    "y": 620.0
+  },
+  {
+    "backgroundColor": "#e9ecef",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 40.0,
+    "strokeColor": "#1e1e1e",
+    "text": "routing table\n172.18.0.0/16 via br0",
+    "type": "text",
+    "width": 184.8,
+    "x": 772.0,
+    "y": 632.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "ns0lo",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 120.0,
+    "x": 100.0,
+    "y": 140.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "ns0lo",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "lo0",
+    "type": "text",
+    "width": 26.400000000000002,
+    "x": 146.8,
+    "y": 165.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "ns1lo",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 120.0,
+    "x": 660.0,
+    "y": 140.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "ns1lo",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "lo0",
+    "type": "text",
+    "width": 26.400000000000002,
+    "x": 706.8,
+    "y": 165.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 60.0,
+    "id": "rootlo",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 120.0,
+    "x": 100.0,
+    "y": 640.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "rootlo",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "lo0",
+    "type": "text",
+    "width": 26.400000000000002,
+    "x": 146.8,
+    "y": 660.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 60.0,
+    "id": "eth0",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 120.0,
+    "x": 240.0,
+    "y": 640.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "eth0",
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "eth0",
+    "type": "text",
+    "width": 35.2,
+    "x": 282.4,
+    "y": 660.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "[ linux server ]",
+    "type": "text",
+    "width": 176.0,
+    "x": 908.0,
+    "y": 16.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "[ netns0 ]",
+    "type": "text",
+    "width": 110.0,
+    "x": 76.0,
+    "y": 76.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "[ netns1 ]",
+    "type": "text",
+    "width": 110.0,
+    "x": 636.0,
+    "y": 76.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "[ root network namespace ]",
+    "type": "text",
+    "width": 286.0,
+    "x": 407.0,
+    "y": 336.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "yellow = container namespace · blue = root namespace · green = network interface",
+    "type": "text",
+    "width": 704.0,
+    "x": 0.0,
+    "y": 810.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 160.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        160.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 0.0,
+    "x": 350.0,
+    "y": 215.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 160.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        160.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 0.0,
+    "x": 910.0,
+    "y": 215.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 120.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        120.0
+      ],
+      [
+        85.0,
+        120.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 85.0,
+    "x": 350.0,
+    "y": 455.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 120.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        120.0
+      ],
+      [
+        -245.0,
+        120.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 245.0,
+    "x": 910.0,
+    "y": 455.0
+  }
+]

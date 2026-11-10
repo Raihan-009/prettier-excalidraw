@@ -1,0 +1,438 @@
+[
+  {
+    "backgroundColor": "#e7f5ff",
+    "height": 440.0,
+    "id": "backend",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 1200.0,
+    "x": 400.0,
+    "y": 0.0
+  },
+  {
+    "backgroundColor": "#ffc9c9",
+    "height": 80.0,
+    "id": "cache",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 400.0,
+    "x": 720.0,
+    "y": 300.0
+  },
+  {
+    "backgroundColor": "#ffc9c9",
+    "containerId": "cache",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 50.0,
+    "strokeColor": "#1e1e1e",
+    "text": "redis\n[idempotency keys]",
+    "type": "text",
+    "width": 198.0,
+    "x": 821.0,
+    "y": 315.0
+  },
+  {
+    "backgroundColor": "#ffc9c9",
+    "height": 80.0,
+    "id": "db",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 400.0,
+    "x": 1160.0,
+    "y": 300.0
+  },
+  {
+    "backgroundColor": "#ffc9c9",
+    "containerId": "db",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 50.0,
+    "strokeColor": "#1e1e1e",
+    "text": "postgres\n[payments, ledger]",
+    "type": "text",
+    "width": 198.0,
+    "x": 1261.0,
+    "y": 315.0
+  },
+  {
+    "backgroundColor": "#ffd8a8",
+    "height": 80.0,
+    "id": "stripe",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 320.0,
+    "x": 1720.0,
+    "y": 120.0
+  },
+  {
+    "backgroundColor": "#ffd8a8",
+    "containerId": "stripe",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 50.0,
+    "strokeColor": "#1e1e1e",
+    "text": "stripe\n[external psp]",
+    "type": "text",
+    "width": 154.00000000000003,
+    "x": 1803.0,
+    "y": 135.0
+  },
+  {
+    "backgroundColor": "#ced4da",
+    "height": 80.0,
+    "id": "app",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 240.0,
+    "x": 40.0,
+    "y": 120.0
+  },
+  {
+    "backgroundColor": "#ced4da",
+    "containerId": "app",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 50.0,
+    "strokeColor": "#1e1e1e",
+    "text": "mobile app\n[ios / android]",
+    "type": "text",
+    "width": 165.0,
+    "x": 77.5,
+    "y": 135.0
+  },
+  {
+    "backgroundColor": "#a5d8ff",
+    "height": 70.0,
+    "id": "pay",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 260.0,
+    "x": 860.0,
+    "y": 125.0
+  },
+  {
+    "backgroundColor": "#a5d8ff",
+    "containerId": "pay",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "payment service",
+    "type": "text",
+    "width": 165.0,
+    "x": 907.5,
+    "y": 147.5
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "height": 70.0,
+    "id": "gw",
+    "strokeColor": "#1e1e1e",
+    "type": "rectangle",
+    "width": 240.0,
+    "x": 460.0,
+    "y": 125.0
+  },
+  {
+    "backgroundColor": "#b2f2bb",
+    "containerId": "gw",
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "api gateway",
+    "type": "text",
+    "width": 121.00000000000001,
+    "x": 519.5,
+    "y": 147.5
+  },
+  {
+    "backgroundColor": "transparent",
+    "height": 64.0,
+    "strokeColor": "transparent",
+    "type": "image",
+    "width": 64.0,
+    "x": 732.0,
+    "y": 308.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "height": 64.0,
+    "strokeColor": "transparent",
+    "type": "image",
+    "width": 64.0,
+    "x": 1172.0,
+    "y": 308.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "height": 63.0,
+    "strokeColor": "transparent",
+    "type": "image",
+    "width": 63.0,
+    "x": 1732.0,
+    "y": 128.5
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 20,
+    "height": 25.0,
+    "strokeColor": "#1e1e1e",
+    "text": "[ payment backend ]",
+    "type": "text",
+    "width": 209.00000000000003,
+    "x": 1375.0,
+    "y": 16.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 28,
+    "height": 35.0,
+    "strokeColor": "#1e1e1e",
+    "text": "payment flow",
+    "type": "text",
+    "width": 184.8,
+    "x": 40.0,
+    "y": 500.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "grey = client · green = gateway · blue = service · red = data · orange = external",
+    "type": "text",
+    "width": 712.8000000000001,
+    "x": 40.0,
+    "y": 550.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "https",
+    "type": "text",
+    "width": 44.0,
+    "x": 348.0,
+    "y": 132.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "route /payments",
+    "type": "text",
+    "width": 132.0,
+    "x": 714.0,
+    "y": 132.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#2f9e44",
+    "text": "charge",
+    "type": "text",
+    "width": 52.800000000000004,
+    "x": 1393.6,
+    "y": 132.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1971c2",
+    "text": "webhook",
+    "type": "text",
+    "width": 61.60000000000001,
+    "x": 1414.2,
+    "y": 47.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "get/set idempotency key",
+    "type": "text",
+    "width": 202.4,
+    "x": 968.0,
+    "y": 261.25
+  },
+  {
+    "backgroundColor": "transparent",
+    "containerId": null,
+    "fontFamily": 8,
+    "fontSize": 16,
+    "height": 20.0,
+    "strokeColor": "#1e1e1e",
+    "text": "writes payments, ledger",
+    "type": "text",
+    "width": 202.4,
+    "x": 1328.0,
+    "y": 261.25
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        170.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 170.0,
+    "x": 285.0,
+    "y": 160.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        150.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 150.0,
+    "x": 705.0,
+    "y": 160.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 0.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        590.0,
+        0.0
+      ]
+    ],
+    "strokeColor": "#2f9e44",
+    "type": "arrow",
+    "width": 590.0,
+    "x": 1125.0,
+    "y": 160.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 45.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -40.0
+      ],
+      [
+        -790.0,
+        -40.0
+      ],
+      [
+        -790.0,
+        5.0
+      ]
+    ],
+    "strokeColor": "#1971c2",
+    "type": "arrow",
+    "width": 790.0,
+    "x": 1840.0,
+    "y": 115.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 95.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        47.5
+      ],
+      [
+        30.0,
+        47.5
+      ],
+      [
+        30.0,
+        95.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 30.0,
+    "x": 930.0,
+    "y": 200.0
+  },
+  {
+    "backgroundColor": "transparent",
+    "endArrowhead": "triangle_outline",
+    "height": 95.0,
+    "points": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        47.5
+      ],
+      [
+        270.0,
+        47.5
+      ],
+      [
+        270.0,
+        95.0
+      ]
+    ],
+    "strokeColor": "#1e1e1e",
+    "type": "arrow",
+    "width": 270.0,
+    "x": 1050.0,
+    "y": 200.0
+  }
+]

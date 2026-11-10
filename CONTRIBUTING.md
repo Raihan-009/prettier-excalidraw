@@ -30,6 +30,10 @@ python3 -m unittest discover -s tests -v
 The tests build every spec in `assets/examples`, lint the result, and check that
 `lint.py` catches deliberately broken files and `fix.py` repairs them.
 
+When an intentional build change alters an example diagram, run
+`python3 tests/test_golden.py --update` (use `python` on Windows) and review
+the snapshot diffs before committing. Run it when adding an example spec too.
+
 ## Proposing a style change
 Open an issue with a before/after PNG. Style rules were derived by measuring a
 set of real diagrams, so a change should come with the same kind of evidence:
